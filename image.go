@@ -60,7 +60,8 @@ func main() {
 	//docker login
 	cli, ctx, err := dockerLogin(config)
 	if err != nil {
-		return errors.New("@" + config.GhUser + " ,docker login 报错 `" + err.Error() + "`"), originImageName, targetImageName
+		fmt.Printf("docker login 报错 ： %s\n", err)
+		os.Exit(0)
 	}
 	
 
@@ -71,18 +72,21 @@ func main() {
 		//docker pull
 		err = dockerPull(originImageName, cli, ctx)
 		if err != nil {
-			return errors.New("@" + *issues.GetUser().Login + " ,docker pull 报错 `" + err.Error() + "`"), originImageName, targetImageName
+			fmt.Printf("docker pull 报错： %s\n", err)
+			os.Exit(0)
 		}
 
 		//docker tag
 		err = dockerTag(originImageName, targetImageName, cli, ctx)
 		if err != nil {
-			return errors.New("@" + config.GhUser + " ,docker tag 报错 `" + err.Error() + "`"), originImageName, targetImageName
+			fmt.Printf("docker tag 报错: %s\n", err)
+			os.Exit(0)
 		}
 		//docker push
 		err = dockerPush(targetImageName, cli, ctx, config)
 		if err != nil {
-			return errors.New("@" + config.GhUser + " ,docker push 报错 `" + err.Error() + "`"), originImageName, targetImageName
+			fmt.Printf("docker push 报错: %s\n", err)
+			os.Exit(0)
 		}
 
 	}
@@ -145,4 +149,16 @@ func dockerPush(targetImageName string, cli *client.Client, ctx context.Context,
 	defer pushOut.Close()
 	io.Copy(os.Stdout, pushOut)
 	return nil
+}
+
+type Config struct {
+	GhToken           string            `yaml:"gh_token"`
+	GhUser            string            `yaml:"gh_user"`
+	Repo              string            `yaml:"repo"`
+	Registry          string            `yaml:"registry"`
+	RegistryNamespace string            `yaml:"registry_namespace"`
+	RegistryUserName  string            `yaml:"registry_user_name"`
+	RegistryPassword  string            `yaml:"registry_password"`
+	Images             map[string]string `yaml:"images"`
+	RunId             string            `yaml:"run_id"`
 }
