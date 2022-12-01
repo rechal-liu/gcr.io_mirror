@@ -2,6 +2,7 @@ name: pull.image
 
 on:
   push:
+    
 
 jobs:
   build:

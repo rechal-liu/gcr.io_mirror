@@ -38,7 +38,7 @@ func main() {
 		RegistryPassword:  *registryPassword,
 		RunId:             *runId,
 		Images: map[string]string{
-			"registry.gitlab.com/gitlab-org/gitlab-runner:alpine-v15.6.1":          "cc237738572/gitlab-runner:alpine-v15.6.1",
+			"registry.gitlab.com/gitlab-org/gitlab-runner:alpine-v15.6.1":          "gitlab-runner:alpine-v15.6.1",
 		},
 	}
 	needImagesFile, err := ioutil.ReadFile("needImages.yaml")
@@ -60,7 +60,7 @@ func main() {
 
 	for k, v := range config.Images {
 		originImageName := k
-		targetImageName := v
+		targetImageName := config.RegistryNamespace +"/" + v
 
 		//docker pull
 		err := dockerPull(originImageName, cli, ctx)
