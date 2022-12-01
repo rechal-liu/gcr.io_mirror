@@ -3,3 +3,4 @@
 "^registry.k8s.io": "google-containers"
 "^quay.io":         "quay"
 "^ghcr.io":         "ghcr"
+"^registry.gitlab.com": "gitlab-registry"
