@@ -62,23 +62,31 @@ func main() {
 	if err != nil {
 		return errors.New("@" + config.GhUser + " ,docker login 报错 `" + err.Error() + "`"), originImageName, targetImageName
 	}
-	//docker pull
-	err = dockerPull(originImageName, cli, ctx)
-
-	if err != nil {
-		return errors.New("@" + *issues.GetUser().Login + " ,docker pull 报错 `" + err.Error() + "`"), originImageName, targetImageName
-	}
-	//docker tag
 	
-	err = dockerTag(originImageName, targetImageName, cli, ctx)
-	if err != nil {
-		return errors.New("@" + config.GhUser + " ,docker tag 报错 `" + err.Error() + "`"), originImageName, targetImageName
+
+	for k, v := range config.Images {
+		targetImageName := k
+		targetImageName := v
+
+		//docker pull
+		err = dockerPull(originImageName, cli, ctx)
+		if err != nil {
+			return errors.New("@" + *issues.GetUser().Login + " ,docker pull 报错 `" + err.Error() + "`"), originImageName, targetImageName
+		}
+
+		//docker tag
+		err = dockerTag(originImageName, targetImageName, cli, ctx)
+		if err != nil {
+			return errors.New("@" + config.GhUser + " ,docker tag 报错 `" + err.Error() + "`"), originImageName, targetImageName
+		}
+		//docker push
+		err = dockerPush(targetImageName, cli, ctx, config)
+		if err != nil {
+			return errors.New("@" + config.GhUser + " ,docker push 报错 `" + err.Error() + "`"), originImageName, targetImageName
+		}
+
 	}
-	//docker push
-	err = dockerPush(targetImageName, cli, ctx, config)
-	if err != nil {
-		return errors.New("@" + config.GhUser + " ,docker push 报错 `" + err.Error() + "`"), originImageName, targetImageName
-	}
+
 }
 func dockerLogin(config *Config) (*client.Client, context.Context, error) {
 	cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
