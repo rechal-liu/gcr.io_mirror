@@ -53,7 +53,7 @@ func main() {
 	//docker login
 	cli, ctx, err := dockerLogin(config)
 	if err != nil {
-		fmt.Printf("docker login 报错 ： %s\n", err)
+		fmt.Printf("docker login 报错 : %s\n", err)
 		os.Exit(0)
 	}
 	
