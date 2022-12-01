@@ -60,7 +60,7 @@ func main() {
 
 	for k, v := range config.Images {
 		originImageName := k
-		targetImageName := config.RegistryNamespace +"/" + v
+		targetImageName := strings.ToLower(config.RegistryNamespace) + "/" + v
 
 		fmt.Println("source:", originImageName, " , target:", targetImageName)
 		//docker pull
