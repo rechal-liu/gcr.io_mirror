@@ -70,13 +70,13 @@ func main() {
 		}
 
 		//docker tag
-		err := dockerTag(originImageName, targetImageName, cli, ctx)
+		err = dockerTag(originImageName, targetImageName, cli, ctx)
 		if err != nil {
 			fmt.Printf("docker tag 报错: %s\n", err)
 			os.Exit(0)
 		}
 		//docker push
-		err := dockerPush(targetImageName, cli, ctx, config)
+		err = dockerPush(targetImageName, cli, ctx, config)
 		if err != nil {
 			fmt.Printf("docker push 报错: %s\n", err)
 			os.Exit(0)
