@@ -1,23 +1,16 @@
 package main
 import (
-	"bytes"
 	"context"
 	"encoding/base64"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
-	"github.com/google/go-github/v47/github"
-	"golang.org/x/oauth2"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"gopkg.in/yaml.v3"
 	"io"
 	"io/ioutil"
 	"os"
-	"regexp"
-	"strings"
-	"text/template"
 )
 
 func main() {
@@ -66,24 +59,24 @@ func main() {
 	
 
 	for k, v := range config.Images {
-		targetImageName := k
+		originImageName := k
 		targetImageName := v
 
 		//docker pull
-		err = dockerPull(originImageName, cli, ctx)
+		err := dockerPull(originImageName, cli, ctx)
 		if err != nil {
 			fmt.Printf("docker pull 报错： %s\n", err)
 			os.Exit(0)
 		}
 
 		//docker tag
-		err = dockerTag(originImageName, targetImageName, cli, ctx)
+		err := dockerTag(originImageName, targetImageName, cli, ctx)
 		if err != nil {
 			fmt.Printf("docker tag 报错: %s\n", err)
 			os.Exit(0)
 		}
 		//docker push
-		err = dockerPush(targetImageName, cli, ctx, config)
+		err := dockerPush(targetImageName, cli, ctx, config)
 		if err != nil {
 			fmt.Printf("docker push 报错: %s\n", err)
 			os.Exit(0)
