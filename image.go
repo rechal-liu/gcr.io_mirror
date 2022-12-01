@@ -62,6 +62,7 @@ func main() {
 		originImageName := k
 		targetImageName := config.RegistryNamespace +"/" + v
 
+		fmt.Println("source:", originImageName, " , target:", targetImageName)
 		//docker pull
 		err := dockerPull(originImageName, cli, ctx)
 		if err != nil {
