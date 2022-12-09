@@ -1,16 +1,18 @@
 package main
+
 import (
+	"bufio"
 	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
+	"os"
+	"strings"
+
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
 	"gopkg.in/alecthomas/kingpin.v2"
-	"gopkg.in/yaml.v3"
-	"io"
-	"io/ioutil"
-	"os"
 )
 
 func main() {
@@ -37,17 +39,11 @@ func main() {
 		RegistryUserName:  *registryUserName,
 		RegistryPassword:  *registryPassword,
 		RunId:             *runId,
-		Images: map[string]string{
-			"registry.gitlab.com/gitlab-org/gitlab-runner:alpine-v15.6.1":          "gitlab-runner:alpine-v15.6.1",
-		},
+		Images:            []string{},
 	}
-	needImagesFile, err := ioutil.ReadFile("needImages.yaml")
+	list, err := lineByLine("./images.txt")
 	if err == nil {
-		rules := make(map[string]string)
-		err2 := yaml.Unmarshal(needImagesFile, &rules)
-		if err2 == nil {
-			config.Images = rules
-		}
+		config.Images = list
 	}
 
 	//docker login
@@ -56,11 +52,10 @@ func main() {
 		fmt.Printf("docker login 报错 : %s\n", err)
 		os.Exit(0)
 	}
-	
 
-	for k, v := range config.Images {
-		originImageName := k
-		targetImageName := "cc237738572" + "/" + v
+	for _, image := range config.Images {
+		originImageName := strings.TrimSpace(image)
+		targetImageName := "cc237738572/" + strings.Join(strings.Split(originImageName, "/"), "_")
 
 		fmt.Println("source:", originImageName, " , target:", targetImageName)
 		//docker pull
@@ -146,13 +141,41 @@ func dockerPush(targetImageName string, cli *client.Client, ctx context.Context,
 }
 
 type Config struct {
-	GhToken           string            `yaml:"gh_token"`
-	GhUser            string            `yaml:"gh_user"`
-	Repo              string            `yaml:"repo"`
-	Registry          string            `yaml:"registry"`
-	RegistryNamespace string            `yaml:"registry_namespace"`
-	RegistryUserName  string            `yaml:"registry_user_name"`
-	RegistryPassword  string            `yaml:"registry_password"`
-	Images             map[string]string `yaml:"images"`
-	RunId             string            `yaml:"run_id"`
+	GhToken           string   `yaml:"gh_token"`
+	GhUser            string   `yaml:"gh_user"`
+	Repo              string   `yaml:"repo"`
+	Registry          string   `yaml:"registry"`
+	RegistryNamespace string   `yaml:"registry_namespace"`
+	RegistryUserName  string   `yaml:"registry_user_name"`
+	RegistryPassword  string   `yaml:"registry_password"`
+	Images            []string `yaml:"images"`
+	RunId             string   `yaml:"run_id"`
+}
+
+// lineByLine 逐行读取文本
+func lineByLine(file string) ([]string, error) {
+
+	var err error
+	var list []string
+
+	f, err := os.Open(file)
+	if err != nil {
+		return list, err
+	}
+	defer f.Close()
+	r := bufio.NewReader(f)
+	for {
+		line, err := r.ReadString('\n')
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			fmt.Printf("error reading file %s", err)
+			break
+		}
+		if !strings.HasPrefix(line, "#") {
+			list = append(list, line)
+		}
+
+	}
+	return list, nil
 }
