@@ -45,7 +45,7 @@ func main() {
 	if err == nil {
 		config.Images = list
 	}
-
+    fmt.Println(list)
 	//docker login
 	cli, ctx, err := dockerLogin(config)
 	if err != nil {
