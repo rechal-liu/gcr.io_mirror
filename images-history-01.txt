@@ -177,3 +177,5 @@ registry.k8s.io/kube-scheduler:v1.25.5
 registry.k8s.io/kube-proxy:v1.25.5
 registry.k8s.io/pause:3.8
 registry.k8s.io/etcd:3.5.4-0
+registry.k8s.io/pause:3.6
+
