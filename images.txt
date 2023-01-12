@@ -1,3 +1,7 @@
 # the start 
-k8s.gcr.io/metrics-server/metrics-server:v0.6.2
+registry.k8s.io/kube-apiserver:v1.25.4
+registry.k8s.io/kube-controller-manager:v1.25.4
+registry.k8s.io/kube-scheduler:v1.25.4
+registry.k8s.io/kube-proxy:v1.25.4
+registry.k8s.io/etcd:3.5.5-0
 # the end is required ! do not delete it
