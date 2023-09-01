@@ -180,3 +180,10 @@ registry.k8s.io/etcd:3.5.4-0
 registry.k8s.io/pause:3.6
 registry.k8s.io/ingress-nginx/controller:v1.5.1
 registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20220916-gd32f8c343
+
+#2023-09-01
+registry.k8s.io/kube-apiserver:v1.25.4
+registry.k8s.io/kube-controller-manager:v1.25.4
+registry.k8s.io/kube-scheduler:v1.25.4
+registry.k8s.io/kube-proxy:v1.25.4
+registry.k8s.io/etcd:3.5.5-0
