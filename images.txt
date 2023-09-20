@@ -1,3 +1,5 @@
 # the start 
-registry.k8s.io/metrics-server/metrics-server:v0.6.4
+# registry.k8s.io/metrics-server/metrics-server:v0.6.4
+registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.9.2
+registry.k8s.io/prometheus-adapter/prometheus-adapter:v0.11.1
 # the end is required ! do not delete it
