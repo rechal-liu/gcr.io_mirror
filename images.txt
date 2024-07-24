@@ -1,4 +1,3 @@
 # the start 
-registry.k8s.io/ingress-nginx/controller:v1.8.2
-registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20230407
+jenkins/inbound-agent:latest
 # the end is required ! do not delete it
