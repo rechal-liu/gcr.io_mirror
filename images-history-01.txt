@@ -200,3 +200,5 @@ registry.k8s.io/coredns/coredns:v1.10.1
 #2024-07-24
 registry.k8s.io/ingress-nginx/controller:v1.8.2
 registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20230407
+
+jenkins/inbound-agent:latest
