@@ -1,4 +1,4 @@
 # the start 
 # test
-nvidia/k8s-device-plugin:1.0.0-beta6
+nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 # the end is required ! do not delete it
